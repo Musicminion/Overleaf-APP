@@ -20,7 +20,7 @@ import psl from 'psl';
 import isUrl from 'is-url';
 
 var name = "pake-cli";
-var version = "2.3.3";
+var version = "2.3.6";
 var description = "🤱🏻 Turn any webpage into a desktop app with Rust. 🤱🏻 利用 Rust 轻松构建轻量级多端桌面应用。";
 var engines = {
 	node: ">=16.0.0"
@@ -67,42 +67,42 @@ var type = "module";
 var exports = "./dist/pake.js";
 var license = "MIT";
 var dependencies = {
-	"@tauri-apps/api": "^1.4.0",
-	"@tauri-apps/cli": "^1.4.0",
-	axios: "^1.1.3",
-	chalk: "^5.1.2",
-	commander: "^11.0.0",
-	"file-type": "^18.0.0",
-	"fs-extra": "^11.1.0",
+	"@tauri-apps/api": "^1.5.1",
+	"@tauri-apps/cli": "^1.5.6",
+	axios: "^1.6.1",
+	chalk: "^5.3.0",
+	commander: "^11.1.0",
+	"file-type": "^18.6.0",
+	"fs-extra": "^11.1.1",
 	"is-url": "^1.2.4",
 	loglevel: "^1.8.1",
-	ora: "^6.1.2",
+	ora: "^7.0.1",
 	prompts: "^2.4.2",
 	psl: "^1.9.0",
 	shelljs: "^0.8.5",
 	"tmp-promise": "^3.0.3",
-	"update-notifier": "^6.0.2"
+	"update-notifier": "^7.0.0"
 };
 var devDependencies = {
-	"@rollup/plugin-alias": "^4.0.2",
-	"@rollup/plugin-commonjs": "^23.0.2",
-	"@rollup/plugin-json": "^5.0.2",
-	"@rollup/plugin-replace": "^5.0.2",
-	"@rollup/plugin-terser": "^0.1.0",
-	"@types/fs-extra": "^9.0.13",
-	"@types/is-url": "^1.2.30",
-	"@types/page-icon": "^0.3.4",
-	"@types/prompts": "^2.4.1",
-	"@types/psl": "^1.1.0",
-	"@types/shelljs": "^0.8.11",
-	"@types/tmp": "^0.2.3",
-	"@types/update-notifier": "^6.0.1",
+	"@rollup/plugin-alias": "^5.0.1",
+	"@rollup/plugin-commonjs": "^25.0.7",
+	"@rollup/plugin-json": "^6.0.1",
+	"@rollup/plugin-replace": "^5.0.5",
+	"@rollup/plugin-terser": "^0.4.4",
+	"@types/fs-extra": "^11.0.4",
+	"@types/is-url": "^1.2.32",
+	"@types/page-icon": "^0.3.6",
+	"@types/prompts": "^2.4.8",
+	"@types/psl": "^1.1.3",
+	"@types/shelljs": "^0.8.15",
+	"@types/tmp": "^0.2.6",
+	"@types/update-notifier": "^6.0.7",
 	"app-root-path": "^3.1.0",
 	"cross-env": "^7.0.3",
-	rollup: "^3.3.0",
-	"rollup-plugin-typescript2": "^0.34.1",
-	tslib: "^2.4.1",
-	typescript: "^4.9.3"
+	rollup: "^4.3.0",
+	"rollup-plugin-typescript2": "^0.36.0",
+	tslib: "^2.6.2",
+	typescript: "^5.2.2"
 };
 var packageJson = {
 	name: name,
@@ -124,7 +124,7 @@ var packageJson = {
 
 var windows = [
 	{
-		url: "https://weread.qq.com/",
+		url: "https://weread.qq.com",
 		transparent: true,
 		fullscreen: false,
 		width: 1200,
@@ -946,7 +946,7 @@ function resolveAppName(name, platform) {
 function isValidName(name, platform) {
     const platformRegexMapping = {
         linux: /^[a-z0-9]+(-[a-z0-9]+)*$/,
-        default: /^[a-zA-Z0-9]+$/,
+        default: /^[a-zA-Z0-9]+([-a-zA-Z0-9])*$/,
     };
     const reg = platformRegexMapping[platform] || platformRegexMapping.default;
     return !!name && reg.test(name);
@@ -964,7 +964,7 @@ async function handleOptions(options, url) {
     }
     if (!isValidName(name, platform)) {
         const LINUX_NAME_ERROR = `✕ name should only include lowercase letters, numbers, and dashes, and must contain at least one lowercase letter. Examples: com-123-xxx, 123pan, pan123, weread, we-read.`;
-        const DEFAULT_NAME_ERROR = `✕ Name should only include letters and numbers, and must contain at least one letter. Examples: 123pan, 123Pan, Pan123, weread, WeRead, WERead.`;
+        const DEFAULT_NAME_ERROR = `✕ Name should only include letters and numbers, and dashes (dashes must not at the begining), and must contain at least one letter. Examples: 123pan, 123Pan, Pan123, weread, WeRead, WERead, we-read.`;
         const errorMsg = platform === 'linux' ? LINUX_NAME_ERROR : DEFAULT_NAME_ERROR;
         logger.error(errorMsg);
         if (isActions) {
